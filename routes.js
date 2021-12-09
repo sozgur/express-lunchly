@@ -12,7 +12,7 @@ const router = new express.Router();
 router.get("/search", async function (req, res, next) {
   try {
     const { q } = req.query;
-    const customers = await Customer.search(q);
+    const customers = await Customer.search(q.trim());
     return res.render("customer_list.html", { customers, route: "search" });
   } catch (err) {
     return next(err);
@@ -25,6 +25,17 @@ router.get("/", async function (req, res, next) {
   try {
     const customers = await Customer.all();
     return res.render("customer_list.html", { customers });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+/** Get best customers */
+
+router.get("/best-customers", async function (req, res, next) {
+  try {
+    const customers = await Customer.getBestCustomers();
+    return res.render("customer_list.html", { customers, route: "best" });
   } catch (err) {
     return next(err);
   }

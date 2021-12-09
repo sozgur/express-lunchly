@@ -4,8 +4,11 @@
 
 <a class="btn btn-primary" style="float: right" href="/add/">Add a Customer</a></p>
 
+
 {% if route === 'search' %}
   <h1>Search Results</h1>  
+{% elif route === 'best' %}
+  <h1>Best Customers</h1> 
 {% else %}
   <h1>Customers</h1>
 {% endif %}

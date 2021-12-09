@@ -53,6 +53,8 @@ class Customer {
     return new Customer(customer);
   }
 
+  /** search customers with query. */
+
   static async search(query) {
     query = query.split(" ");
     let q1, q2, SQLQuery;
@@ -86,6 +88,23 @@ class Customer {
           ORDER BY first_name`;
     }
     const results = await db.query(`${SQLQuery}`, [`${q1}%`, `${q2}%`]);
+
+    return results.rows.map((c) => new Customer(c));
+  }
+
+  /** get top 10 customers ordered by most reservations. */
+
+  static async getBestCustomers() {
+    const results = await db.query(`
+      SELECT c.id, c.first_name AS "firstName", 
+      c.last_name AS "lastName",
+      c.phone, c.notes
+      FROM customers AS c
+      LEFT JOIN reservations AS r
+      ON c.id = r.customer_id
+      GROUP BY c.id
+      ORDER BY COUNT(c.id) DESC
+      LIMIT 10`);
 
     return results.rows.map((c) => new Customer(c));
   }
