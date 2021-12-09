@@ -4,7 +4,15 @@
 
 <a class="btn btn-primary" style="float: right" href="/add/">Add a Customer</a></p>
 
-<h1>Customers</h1>
+{% if route === 'search' %}
+  <h1>Search Results</h1>  
+{% else %}
+  <h1>Customers</h1>
+{% endif %}
+
+ {% if customers.length === 0 %}
+  <h4>Sorry, no customer found</h4>
+ {% endif %} 
 
 <ul style="column-count: 4">
   {% for customer in customers %}

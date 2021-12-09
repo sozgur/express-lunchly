@@ -53,6 +53,43 @@ class Customer {
     return new Customer(customer);
   }
 
+  static async search(query) {
+    query = query.split(" ");
+    let q1, q2, SQLQuery;
+
+    let searchType = "OR";
+
+    if (query.length > 1) {
+      q1 = query[0];
+      q2 = query[1];
+      searchType = "AND";
+    } else {
+      q1 = query[0];
+      q2 = query[0];
+    }
+
+    if (searchType === "AND") {
+      SQLQuery = `SELECT id,
+          first_name AS "firstName",  
+          last_name AS "lastName", 
+          phone, 
+          notes
+          FROM customers WHERE first_name ILIKE $1 AND last_name ILIKE $2
+          ORDER BY first_name`;
+    } else {
+      SQLQuery = `SELECT id,
+          first_name AS "firstName",  
+          last_name AS "lastName", 
+          phone, 
+          notes
+          FROM customers WHERE first_name ILIKE $1 OR last_name ILIKE $2
+          ORDER BY first_name`;
+    }
+    const results = await db.query(`${SQLQuery}`, [`${q1}%`, `${q2}%`]);
+
+    return results.rows.map((c) => new Customer(c));
+  }
+
   /** get all reservations for this customer. */
 
   async getReservations() {
