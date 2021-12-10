@@ -73,7 +73,6 @@ router.post("/add/", async function (req, res, next) {
 
 router.get("/:id/", async function (req, res, next) {
   try {
-    console.log("Hiii");
     const customer = await Customer.get(req.params.id);
 
     const reservations = await customer.getReservations();

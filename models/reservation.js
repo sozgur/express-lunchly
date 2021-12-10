@@ -3,6 +3,7 @@
 const moment = require("moment");
 
 const db = require("../db");
+const ExpressError = require("../expressError");
 
 /** A reservation for a party */
 
@@ -13,6 +14,20 @@ class Reservation {
     this.numGuests = numGuests;
     this.startAt = startAt;
     this.notes = notes;
+  }
+
+  get numGuests() {
+    return this.numGuest;
+  }
+
+  set numGuests(guestNumber) {
+    if (guestNumber < 1) {
+      throw new ExpressError(
+        "Not valid guess number, Please enter at least 1",
+        400
+      );
+    }
+    this.numGuest = guestNumber;
   }
 
   /** formatter for startAt */
